@@ -34,35 +34,40 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 use swganh;
 
 --
--- Definition of table `galaxy`
+-- Definition of procedure `sp_CSRTicketAppendComment`
 --
 
-DROP TABLE IF EXISTS `galaxy`;
-CREATE TABLE `galaxy` (
-  `galaxy_id` int(5) NOT NULL auto_increment COMMENT 'Server ID',
-  `name` char(32) NOT NULL default '' COMMENT 'Server Name',
-  `address` char(16) NOT NULL default '' COMMENT 'Server IP Address',
-  `port` int(8) NOT NULL default '0' COMMENT 'Server Listen Port',
-  `pingport` int(8) default NULL COMMENT 'Server PING port',
-  `population` int(4) NOT NULL default '0' COMMENT 'Server Population (Administrative Feature)',
-  `character_retention` int(4) NOT NULL COMMENT 'Character retention period (Administrative Feature)',
-  `items_retention` int(4) NOT NULL COMMENT 'Item retention period (Administrative Feature)',
-  `account_retention` int(4) NOT NULL COMMENT 'Account retention period (Administrative Feature)',
-  `status` int(10) unsigned NOT NULL default '0',
-  `last_update` datetime NOT NULL,
-  `Global_Tick_Count` bigint(20) unsigned NOT NULL COMMENT 'the global server tickcount so auctions dont mess up and the larger quests',
-  PRIMARY KEY  (`galaxy_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+DROP PROCEDURE IF EXISTS `sp_CSRTicketAppendComment`;
 
---
--- Dumping data for table `galaxy`
---
+DELIMITER $$
 
-/*!40000 ALTER TABLE `galaxy` DISABLE KEYS */;
-INSERT INTO `galaxy` (`galaxy_id`,`name`,`address`,`port`,`pingport`,`population`,`character_retention`,`items_retention`,`account_retention`,`status`,`last_update`,`Global_Tick_Count`) VALUES 
- (2,'SWGANH TC','192.168.2.2',44991,44992,0,180,1,180,0,'2007-12-05 00:27:55',1438082000),
- (3,'Local','192.168.100.83',44991,44992,0,180,1,180,2,'2007-08-28 10:20:57',791611000);
-/*!40000 ALTER TABLE `galaxy` ENABLE KEYS */;
+/*!50003 SET @TEMP_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */ $$
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_CSRTicketAppendComment`(IN mticket_id BIGINT, mcomment CHAR, mposter CHAR)
+BEGIN
+
+  ##
+  ## sp_CSRAppendTicketComment (mticket_id, mcomment, mposter)
+  ##
+  ## Returns (nothing)
+
+  ## Insert our new comment
+
+  INSERT INTO swganh.csr_comments VALUES (NULL, mticket_id, mcomment, mposter);
+
+  ##
+  ## Update the ticket timestamp
+
+  UPDATE swganh.csr_tickets SET lastmodified = UNIX_TIMESTAMP() WHERE ticket_id = mticket_id;
+
+  ##
+  ## Exit
+
+END $$
+
+/*!50003 SET SESSION SQL_MODE=@TEMP_SQL_MODE */  $$
+
+DELIMITER ;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

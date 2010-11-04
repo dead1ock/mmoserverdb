@@ -44,11 +44,31 @@ DELIMITER $$
 /*!50003 SET @TEMP_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */ $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_ReturnUserAccount`(IN usrName CHAR(255),IN pwrd CHAR(255))
 BEGIN
-	DECLARE shaPwrd  CHAR(255);
-	SET shaPwrd = SHA1(pwrd);
-	SELECT A.account_id, A.username, A.password, A.station_id, A.banned, A.active,A.characters_allowed,A.csr 
-	FROM swganh.account A 
-	WHERE A.banned=0 AND A.authenticated=0 AND A.loggedin=0 AND A.username= usrName AND A.password = shaPwrd;	
+
+  ##
+  ## Stored Procedure
+  ##
+  ## Use: CALL sp_ReturnUserAccount(username, password);
+  ##
+  ## Returns: (server global tick)
+  
+  --
+  -- Declare Vars
+  --
+  
+DECLARE shaPwrd  CHAR(255);
+SET shaPwrd = SHA1(pwrd);
+SELECT 
+	account_id, 
+	account_username, 
+	account_password, 
+	account_station_id, 
+	account_banned, 
+	account_active, 
+	account_characters_allowed, 
+	account_csr 
+FROM swganh.account 
+WHERE account_banned=0 AND account_authenticated = 0 AND account_loggedin = 0 AND account_username= usrName AND account_password = shaPwrd;
 
 END $$
 /*!50003 SET SESSION SQL_MODE=@TEMP_SQL_MODE */  $$
