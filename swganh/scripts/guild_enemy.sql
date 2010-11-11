@@ -1,4 +1,4 @@
-﻿/*
+/*
 ---------------------------------------------------------------------------------------
 This source file is part of SWG:ANH (Star Wars Galaxies - A New Hope - Server Emulator)
 
@@ -39,9 +39,9 @@ use swganh;
 
 DROP TABLE IF EXISTS `guild_enemy`;
 CREATE TABLE `guild_enemy` (
-  `id` bigint(22) unsigned NOT NULL auto_increment,
-  `guildA` bigint(22) unsigned NOT NULL,
-  `guildB` bigint(22) unsigned NOT NULL,
+  `id` int(11) unsigned NOT NULL auto_increment,
+  `guildA` int(11) unsigned NOT NULL,
+  `guildB` int(11) unsigned NOT NULL,
   `status` int(11) unsigned NOT NULL,
   PRIMARY KEY  USING BTREE (`id`),
   KEY `FK_guild_enemy_types` (`status`),

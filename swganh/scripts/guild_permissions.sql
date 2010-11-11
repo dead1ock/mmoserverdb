@@ -1,4 +1,4 @@
-﻿/*
+/*
 ---------------------------------------------------------------------------------------
 This source file is part of SWG:ANH (Star Wars Galaxies - A New Hope - Server Emulator)
 
@@ -40,7 +40,7 @@ use swganh;
 DROP TABLE IF EXISTS `guild_permissions`;
 CREATE TABLE `guild_permissions` (
   `id` bigint(22) unsigned NOT NULL auto_increment,
-  `guild_id` bigint(22) unsigned NOT NULL,
+  `guild_id` int(11) unsigned NOT NULL,
   `character_id` bigint(20) unsigned NOT NULL,
   `permission_type` bigint(22) unsigned NOT NULL,
   PRIMARY KEY  USING BTREE (`id`),

@@ -1,4 +1,4 @@
-﻿/*
+/*
 ---------------------------------------------------------------------------------------
 This source file is part of SWG:ANH (Star Wars Galaxies - A New Hope - Server Emulator)
 
@@ -40,7 +40,7 @@ use swganh;
 DROP TABLE IF EXISTS `guild_sponsorships`;
 CREATE TABLE `guild_sponsorships` (
   `id` bigint(22) unsigned NOT NULL auto_increment,
-  `guild_id` bigint(22) unsigned NOT NULL,
+  `guild_id` int(11) unsigned NOT NULL,
   `character_id` bigint(20) unsigned NOT NULL,
   PRIMARY KEY  USING BTREE (`id`),
   KEY `FK_guild_sponsorship_guild` (`guild_id`),
