@@ -49,6 +49,15 @@ CREATE TABLE `guild_permission_types` (
 --
 
 /*!40000 ALTER TABLE `guild_permission_types` DISABLE KEYS */;
+INSERT INTO `guild_permission_types` (`id`, `permission_desc`) VALUES
+ ('1','Mail'),
+ ('2','Sponsor'),
+ ('3','Title'),
+ ('4','Accept'),
+ ('5','Kick'),
+ ('6','War'),
+ ('7','Change Guild Name'),
+ ('8','Disband Guild');
 /*!40000 ALTER TABLE `guild_permission_types` ENABLE KEYS */;
 
 
