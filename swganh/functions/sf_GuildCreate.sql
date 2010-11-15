@@ -70,6 +70,11 @@ BEGIN
 
   UPDATE `terminals` SET `dataInt1`=guildId WHERE `id`=terminalId;
 
+  ##
+  ## Set leader permissions
+
+  INSERT INTO `guild_permissions` (`guild_id`, `character_id`, `permission_mask`) VALUES ( guildID, leaderId, 255 );
+
   RETURN(guildId);
   
 END $$

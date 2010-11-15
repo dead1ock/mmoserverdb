@@ -34,29 +34,35 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 use swganh;
 
 --
--- Definition of table `guild_permissions`
+-- Definition of procedure `sp_GuildSponsorMember`
 --
 
-DROP TABLE IF EXISTS `guild_permissions`;
-CREATE TABLE `guild_permissions` (
-  `id` bigint(22) unsigned NOT NULL auto_increment,
-  `guild_id` int(11) unsigned NOT NULL,
-  `character_id` bigint(20) unsigned NOT NULL,
-  `permission_mask` int(11) unsigned NOT NULL,
-  PRIMARY KEY  USING BTREE (`id`),
-  KEY `FK_guild_permissions` (`guild_id`),
-  KEY `FK_guild_character` (`character_id`),
-  CONSTRAINT `FK_guild_permissions` FOREIGN KEY (`guild_id`) REFERENCES `guilds` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `FK_guild_character` FOREIGN KEY (`character_id`) REFERENCES `characters` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+DROP PROCEDURE IF EXISTS `sp_GuildSponsorMember`;
 
---
--- Dumping data for table `guild_permissions`
---
+DELIMITER $$
 
-/*!40000 ALTER TABLE `guild_permissions` DISABLE KEYS */;
-/*!40000 ALTER TABLE `guild_permissions` ENABLE KEYS */;
+/*!50003 SET @TEMP_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */ $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_GuildSponsorMember`(IN guild_id INT(11), IN character_name CHAR(32))
+BEGIN
+    
+    ##
+    ## Declare Variables
+    DECLARE character_id BIGINT(22) DEFAULT NULL;
+    
+    ##
+    ## Find the character id
+    SELECT `id` FROM `characters` WHERE `firstname` = character_name INTO character_id;
+    
+    IF character_id IS NOT NULL THEN 
+        INSERT INTO `guild_sponsorships`(`guild_id`, `character_id`) VALUES( guild_id, character_id );
+    END IF;
+    
+    SELECT character_id;
+    
+END $$
+/*!50003 SET SESSION SQL_MODE=@TEMP_SQL_MODE */  $$
 
+DELIMITER ;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
@@ -64,3 +70,4 @@ CREATE TABLE `guild_permissions` (
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
